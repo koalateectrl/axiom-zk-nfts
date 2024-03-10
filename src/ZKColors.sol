@@ -10,6 +10,8 @@ contract ZKColors is ERC721 {
         GREEN
     }
 
+    uint256 private _tokenId = 1;
+
     mapping(uint256 tokenId => Colors color) private _colors;
 
     /// @dev Returns the token collection name.
@@ -55,5 +57,17 @@ contract ZKColors is ERC721 {
                     Base64.encode(dataURI)
                 )
             );
+    }
+
+    function mint(Colors color) external {
+        uint256 id = _tokenId;
+
+        _mint(msg.sender, id);
+
+        // Assign color to token ID.
+        _colors[id] = color;
+
+        // Increment token ID for the next minter.
+        ++_tokenId;
     }
 }
