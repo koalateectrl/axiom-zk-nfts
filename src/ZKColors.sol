@@ -65,4 +65,13 @@ contract ZKColors is ERC721 {
         // Increment token ID for the next minter.
         ++_tokenId;
     }
+
+    // TODO: Connect this with Axiom proof
+    function updateColor(uint256 id) external {
+        if (_colors[id] == Colors.RED) {
+            _colors[id] = Colors.GREEN;
+        } else {
+            _colors[id] = Colors.RED;
+        }
+    }
 }
