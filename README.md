@@ -7,9 +7,9 @@ The steps below assume that you have Node.js and Typescript installed on your ma
 1. Install dependencies `npm i` and `forge install`
 2. Create a .env file and copy + paste the contents of .env.example into it. Fill this with your information.
 3. Deploy the contract `DummyToken1`.
-   1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/DummyToken1:DummyToken1`
+   1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/DummyToken1.sol:DummyToken1`
 4. Deploy the contract `DummyToken2`.
-   1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/DummyToken2:DummyToken2`
+   1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/DummyToken2.sol:DummyToken2`
 5. Deploy the Axiom callback contract `ChangeColorClient`.
    1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/ChangeColorClient.sol:ChangeColorClient --constructor-args 0x83c8c0B395850bA55c830451Cfaca4F2A667a983 11155111`
 
