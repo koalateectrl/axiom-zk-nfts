@@ -1,76 +1,35 @@
 # Axiom Quickstart
 
-## Introduction
+## Setup Part 1 (Deploying Contracts)
 
-This starter repo is a guide to get you started making your first [Axiom](https://axiom.xyz) query as quickly as possible using the [Axiom SDK](https://github.com/axiom-crypto/axiom-sdk-client) and [Axiom smart contract client](https://github.com/axiom-crypto/axiom-v2-periphery). To learn more about Axiom, check out the developer docs at [docs.axiom.xyz](https://docs.axiom.xyz) or join our developer [Telegram](https://t.me/axiom_discuss).
+The steps below assume that you have Node.js and Typescript installed on your machine.
 
-A guide on how to use this repository is available in the [Axiom Docs: Quickstart](https://docs.axiom.xyz/introduction/quickstart).
+1. Install dependencies `npm i` and `forge install`
+2. Create a .env file and copy + paste the contents of .env.example into it. Fill this with your information.
+3. Deploy the contract `DummyToken1`.
+   1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/DummyToken1:DummyToken1`
+4. Deploy the contract `DummyToken2`.
+   1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/DummyToken2:DummyToken2`
+5. Deploy the Axiom callback contract `ChangeColorClient`.
+   1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/ChangeColorClient.sol:ChangeColorClient --constructor-args 0x83c8c0B395850bA55c830451Cfaca4F2A667a983 11155111`
 
-## Installation
+## Setup Part 2 (Minting Tokens)
 
-This repo contains both Foundry and Javascript packages. To install, run:
+1. Mint N DummyToken1s to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken1Address> "mint(uint256)" <N> --rpc-url <ALCHEMY_ENDPOINT>`
+2. Mint M DummyToken2s to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken2Address> "mint(uint256)" <M> --rpc-url <ALCHEMY_ENDPOINT>`
 
-```bash
-forge install
-pnpm install     # or `npm install` or `yarn install`
-```
+## Generate ZKP
 
-For installation instructions for Foundry or a Javascript package manager (`npm`, `yarn`, or `pnpm`), see [Package Manager Installation](#package-manager-installation).
+1. Compile circuit and generate `compiled.json`.
+   1. `npx axiom circuit compile app/axiom/balance.circuit.ts --provider <ALCHEMY_ENDPOINT>`
+2. Generate proof.
+   1. `npx axiom circuit prove app/axiom/data/compiled.json app/axiom/data/inputs.json --provider <ALCHEMY_ENDPOINT>`
+3. Generate query parameters used to call `AxiomV2Query`.
+   1. `npx axiom circuit query-params <ChangeColorClientAddr> --sourceChainId 11155111 --refundAddress <Your EOA Address> --provider <ALCHEMY_ENDPOINT>`
+4. Send the query on-chain
+   1. `cast send --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> --value <payment value> 0x83c8c0B395850bA55c830451Cfaca4F2A667a983 <sendQueryCalldata>` where `sendQueryCalldata` is the value in the calldata field from the json output file `sendQuery.json` that was generated from the previous step.
 
-Copy `.env.example` to `.env` and fill in your JSON-RPC provider URL. If you'd like to send transactions from a local hot wallet on testnet also add a Sepolia private key.
 
-> ⚠️ **WARNING**: Never use your mainnet private key on a testnet! If you use this option, make sure you are not using the same account on mainnet.
 
-## Test
-
-To run Foundry tests that simulate the Axiom integration flow, run
-
-```bash
-forge test -vvvv
-```
-
-## Send a Query on-chain
-
-To send a Query on Sepolia testnet (requires `PRIVATE_KEY_SEPOLIA` in `.env` file), run
-
-```bash
-npx tsx app/index.ts 
-```
-
-## CLI Cheatsheet
-
-```bash
-# compile
-npx axiom circuit compile app/axiom/average.circuit.ts --provider $PROVIDER_URI_SEPOLIA
-
-# prove
-npx axiom circuit prove app/axiom/average.circuit.ts --sourceChainId 11155111 --provider $PROVIDER_URI_SEPOLIA
-
-# get parameters to send a query to Axiom using sendQuery
-npx axiom circuit query-params <callback contract address> --refundAddress <your Sepolia wallet address> --sourceChainId 11155111 --provider $PROVIDER_URI_SEPOLIA
-```
-
-## Package Manager Installation
-
-Install `npm` or `yarn` or `pnpm`:
-
-```bash
-# install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-source ~/.bashrc  # or `source ~/.zshrc` on newer macs
-
-# Install latest LTS node
-nvm install --lts
-
-# Install pnpm
-npm install -g pnpm
-pnpm setup
-source ~/.bashrc  # or `source ~/.zshrc` on newer macs
-```
-
-Install [Foundry](https://book.getfoundry.sh/getting-started/installation). The recommended way to do this is using Foundryup:
-
-```bash
-curl -L https://foundry.paradigm.xyz | bash
-foundryup
-```
