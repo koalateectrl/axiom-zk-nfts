@@ -11,6 +11,7 @@ import {
   witness,
   getAccount,
   getStorage,
+  getSolidityMapping,
 } from "@axiom-crypto/client";
 
 // For type safety, define the input types to your circuit here.
@@ -20,48 +21,43 @@ export interface CircuitInputs {
   token1Addr: CircuitValue;
   token2Addr: CircuitValue;
   userAddr: CircuitValue;
+  // balanceStorageSlot: CircuitValue256;
 }
 
 // Default inputs to use for compiling the circuit. These values should be different than the inputs fed into
 // the circuit at proving time.
 export const defaultInputs = {
-  "blockNumber": 5473850,
+  "blockNumber": 5493970,
   "token1Addr": "0x898A7c662f7D1aD119A168C688E11148189b1b72",
   "token2Addr": "0xfbD52Ea21Ddff75EE829BEbA42A483Bf23622DD7",
-  "userAddr": "0xcD39fEbf4709c7727a72B8C177D141771a9c9554"
+  "userAddr": "0xcD39fEbf4709c7727a72B8C177D141771a9c9554",
+  // "balanceStorageSlot": "0x2f81fe60b2ab28828e87bd24dab26f6bd596d29ee8880d92e1819509e86baa3a"
 }
 
 // The function name `circuit` is searched for by default by our Axiom CLI; if you decide to 
 // change the function name, you'll also need to ensure that you also pass the Axiom CLI flag 
 // `-f <circuitFunctionName>` for it to work
 export const circuit = async (inputs: CircuitInputs) => {
-  
-  // TODO: replace hardcoded value with keccak256(h(address) | bytes32(0)) where h pads address with 0's up to 32 bytes
-  const balanceStorageSlot = 21488382805312895015594397440099327839306139524904766072632750833650216184378;
 
 
-  // TODO: grabbed only a block number and the one 50 blocks ahead, need to remove hard-coding
-  const storageBeforeToken1 = getStorage(inputs.blockNumber, inputs.token1Addr);
-  const slotBeforeValue1 = await storageBeforeToken1.slot(balanceStorageSlot);
-  const storageAfterToken1 = getStorage(add(inputs.blockNumber, 50), inputs.token1Addr);
-  const slotAfterValue1 = await storageAfterToken1.slot(balanceStorageSlot);
+  const mappingBeforeToken1 = getSolidityMapping(sub(inputs.blockNumber, 1000), inputs.token1Addr, 0);
+  const balanceBefore1 = await mappingBeforeToken1.nested([inputs.userAddr]);
+  const mappingAfterToken1 = getSolidityMapping(inputs.blockNumber, inputs.token1Addr, 0);
+  const balanceAfter1 = await mappingAfterToken1.nested([inputs.userAddr]);
 
-
-
-  const storageBeforeToken2 = getStorage(inputs.blockNumber, inputs.token2Addr);
-  const slotBeforeValue2 = await storageBeforeToken2.slot(balanceStorageSlot);
-  const storageAfterToken2 = getStorage(add(inputs.blockNumber, 50), inputs.token2Addr);
-  const slotAfterValue2 = await storageAfterToken2.slot(balanceStorageSlot);
-
+  const mappingBeforeToken2 = getSolidityMapping(sub(inputs.blockNumber, 1000), inputs.token2Addr, 0);
+  const balanceBefore2 = await mappingBeforeToken2.nested([inputs.userAddr]);
+  const mappingAfterToken2 = getSolidityMapping(inputs.blockNumber, inputs.token2Addr, 0);
+  const balanceAfter2 = await mappingAfterToken2.nested([inputs.userAddr]);
   
   addToCallback(inputs.blockNumber);
   addToCallback(inputs.token1Addr);
   addToCallback(inputs.token2Addr);
   addToCallback(inputs.userAddr);
 
-  addToCallback(slotBeforeValue1);
-  addToCallback(slotAfterValue1);
-  addToCallback(slotBeforeValue2);
-  addToCallback(slotAfterValue2);
+  addToCallback(balanceBefore1);
+  addToCallback(balanceAfter1);
+  addToCallback(balanceBefore2);
+  addToCallback(balanceAfter2);
 
 };
