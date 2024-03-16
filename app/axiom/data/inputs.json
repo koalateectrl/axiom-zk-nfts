@@ -2,5 +2,6 @@
     "blockNumber": 5493970,
     "token1Addr": "0x898A7c662f7D1aD119A168C688E11148189b1b72",
     "token2Addr": "0xfbD52Ea21Ddff75EE829BEbA42A483Bf23622DD7",
-    "userAddr": "0xcD39fEbf4709c7727a72B8C177D141771a9c9554"
+    "userAddr": "0xcD39fEbf4709c7727a72B8C177D141771a9c9554",
+    "tokenId": 1
 }

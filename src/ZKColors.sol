@@ -6,6 +6,7 @@ import {Base64} from "solady/utils/Base64.sol";
 
 contract ZKColors is ERC721 {
     enum Colors {
+        BLACK,
         RED,
         GREEN
     }
@@ -13,6 +14,17 @@ contract ZKColors is ERC721 {
     uint256 private _tokenId = 1;
 
     mapping(uint256 tokenId => Colors color) private _colors;
+
+    address private immutable callbackClient;
+
+    modifier onlyCallbackClient() {
+        require(msg.sender == callbackClient);
+        _;
+    }
+
+    constructor(address _callbackClient) {
+        callbackClient = _callbackClient;
+    }
 
     /// @dev Returns the token collection name.
     function name() public pure override returns (string memory) {
@@ -34,7 +46,11 @@ contract ZKColors is ERC721 {
                         abi.encodePacked(
                             '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 3000 3000">',
                             '<rect width="100%" height="100%" fill="',
-                            _colors[id] == Colors.RED ? "red" : "green",
+                            _colors[id] == Colors.RED
+                                ? "red"
+                                : _colors[id] == Colors.GREEN
+                                    ? "green"
+                                    : "black",
                             '" />',
                             "</svg>"
                         )
@@ -46,7 +62,7 @@ contract ZKColors is ERC721 {
     /// @dev Returns the Uniform Resource Identifier (URI) for token `id`.
     function tokenURI(uint256 id) public view override returns (string memory) {
         string memory json = string.concat(
-            '{"name": "ZKColors","description":"Testtesttest","image":"',
+            '{"name": "ZKColors","description":"ZK Color Changing NFT Using Axiom","image":"',
             _getImage(id),
             '"}'
         );
@@ -66,8 +82,7 @@ contract ZKColors is ERC721 {
         ++_tokenId;
     }
 
-    // TODO: Connect this with Axiom proof
-    function updateColor(uint256 id) external {
+    function updateColor(uint256 id) external onlyCallbackClient {
         if (_colors[id] == Colors.RED) {
             _colors[id] = Colors.GREEN;
         } else {

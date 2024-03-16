@@ -21,7 +21,7 @@ export interface CircuitInputs {
   token1Addr: CircuitValue;
   token2Addr: CircuitValue;
   userAddr: CircuitValue;
-  // balanceStorageSlot: CircuitValue256;
+  tokenId: CircuitValue256;
 }
 
 // Default inputs to use for compiling the circuit. These values should be different than the inputs fed into
@@ -31,7 +31,7 @@ export const defaultInputs = {
   "token1Addr": "0x898A7c662f7D1aD119A168C688E11148189b1b72",
   "token2Addr": "0xfbD52Ea21Ddff75EE829BEbA42A483Bf23622DD7",
   "userAddr": "0xcD39fEbf4709c7727a72B8C177D141771a9c9554",
-  // "balanceStorageSlot": "0x2f81fe60b2ab28828e87bd24dab26f6bd596d29ee8880d92e1819509e86baa3a"
+  "tokenId": 1
 }
 
 // The function name `circuit` is searched for by default by our Axiom CLI; if you decide to 
@@ -54,6 +54,7 @@ export const circuit = async (inputs: CircuitInputs) => {
   addToCallback(inputs.token1Addr);
   addToCallback(inputs.token2Addr);
   addToCallback(inputs.userAddr);
+  addToCallback(inputs.tokenId);
 
   addToCallback(balanceBefore1);
   addToCallback(balanceAfter1);

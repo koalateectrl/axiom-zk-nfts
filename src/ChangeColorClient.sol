@@ -2,6 +2,7 @@
 pragma solidity ^0.8.19;
 
 import {AxiomV2Client} from "@axiom-crypto/v2-periphery/client/AxiomV2Client.sol";
+import {IZKColors} from "./IZKColors.sol";
 
 contract ChangeColorClient is AxiomV2Client {
     /// @dev The unique identifier of the circuit accepted by this contract.
@@ -9,6 +10,8 @@ contract ChangeColorClient is AxiomV2Client {
 
     /// @dev The chain ID of the chain whose data the callback is expected to be called from.
     uint64 immutable SOURCE_CHAIN_ID;
+
+    address public immutable NFT_ADDR;
 
     /// @dev provenAverageBalances[blockNumber][address] = Average account balance (in wei)
     mapping(uint256 => mapping(address => uint256))
@@ -43,13 +46,16 @@ contract ChangeColorClient is AxiomV2Client {
     /// @param  _callbackSourceChainId The ID of the chain the query reads from.
     constructor(
         address _axiomV2QueryAddress,
-        uint64 _callbackSourceChainId
+        uint64 _callbackSourceChainId,
+        address _nft
     )
         // bytes32 _querySchema
         AxiomV2Client(_axiomV2QueryAddress)
     {
+        // TODO: Check for Query Schema as well.
         // QUERY_SCHEMA = _querySchema;
         SOURCE_CHAIN_ID = _callbackSourceChainId;
+        NFT_ADDR = _nft;
     }
 
     /// @inheritdoc AxiomV2Client
@@ -78,17 +84,13 @@ contract ChangeColorClient is AxiomV2Client {
         bytes32[] calldata axiomResults,
         bytes calldata // extraData
     ) internal override {
-        // // The callback from the Axiom ZK circuit proof comes out here and we can handle the results from the
-        // // `axiomResults` array. Values should be converted into their original types to be used properly.
-        // uint256 blockNumber = uint256(axiomResults[0]);
-        // address addr = address(uint160(uint256(axiomResults[1])));
-        // uint256 averageBalance = uint256(axiomResults[2]);
+        address userAddr = address(uint160(uint256(axiomResults[3])));
+        require(
+            IZKColors.ownerOf(id) == userAddr,
+            "user does not own this NFT"
+        );
 
-        // // You can do whatever you'd like with the results here. In this example, we just store it the value
-        // // directly in the contract.
-        // provenAverageBalances[blockNumber][addr] = averageBalance;
-
-        // emit AverageBalanceStored(blockNumber, addr, averageBalance);
+        IZKColors(NFT_ADDR).updateColor(id);
 
         emit CallBackValues(
             uint256(axiomResults[0]),
