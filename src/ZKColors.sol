@@ -6,14 +6,15 @@ import {Base64} from "solady/utils/Base64.sol";
 
 contract ZKColors is ERC721 {
     enum Colors {
-        BLACK,
-        RED,
-        GREEN
+        BLACK, // Haven't used Axiom yet
+        RED, // Larger average balance for Token1
+        GREEN, // Larger average balance for Token2
+        BLUE // Same average balance for Token1 and Token2
     }
 
     uint256 private _tokenId = 1;
 
-    mapping(uint256 tokenId => Colors color) private _colors;
+    mapping(uint256 tokenId => Colors color) public colors;
 
     address private immutable callbackClient;
 
@@ -46,11 +47,13 @@ contract ZKColors is ERC721 {
                         abi.encodePacked(
                             '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 3000 3000">',
                             '<rect width="100%" height="100%" fill="',
-                            _colors[id] == Colors.RED
-                                ? "red"
-                                : _colors[id] == Colors.GREEN
-                                    ? "green"
-                                    : "black",
+                            colors[id] == Colors.BLACK
+                                ? "black"
+                                : colors[id] == Colors.RED
+                                    ? "red"
+                                    : colors[id] == Colors.GREEN
+                                        ? "green"
+                                        : "blue",
                             '" />',
                             "</svg>"
                         )
@@ -70,23 +73,29 @@ contract ZKColors is ERC721 {
         return string.concat("data:application/json;utf8,", json);
     }
 
-    function mint(Colors color) external {
+    function mint() external {
         uint256 id = _tokenId;
 
         _mint(msg.sender, id);
 
-        // Assign color to token ID.
-        _colors[id] = color;
+        // Defaults to a value of 0, which is BLACK for the Colors enum.
 
         // Increment token ID for the next minter.
         ++_tokenId;
     }
 
-    function updateColor(uint256 id) external onlyCallbackClient {
-        if (_colors[id] == Colors.RED) {
-            _colors[id] = Colors.GREEN;
-        } else {
-            _colors[id] = Colors.RED;
+    function updateColor(
+        uint256 id,
+        uint256 averageBalanceToken1,
+        uint256 averageBalanceToken2
+    ) external onlyCallbackClient {
+        if (averageBalanceToken1 > averageBalanceToken2) {
+            colors[id] = Colors.RED;
+        } else if (averageBalanceToken2 > averageBalanceToken1) {
+            colors[id] = Colors.GREEN;
+        } else if (averageBalanceToken1 > 0) {
+            // In this arm, averageBalanceToken1 == averageBalanceToken2
+            colors[id] = Colors.BLUE;
         }
     }
 }

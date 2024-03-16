@@ -17,7 +17,13 @@ The steps below assume that you have Node.js and Typescript installed on your ma
 7. Deploy the Axiom callback contract `ChangeColorClient`.
    1. `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/ChangeColorClient.sol:ChangeColorClient --constructor-args 0x83c8c0B395850bA55c830451Cfaca4F2A667a983 11155111`
 8. Verify the contract `ChangeColorClient`.
-   1. `forge verify-contract --etherscan-api-key <ETHERSCAN_API_KEY> --chain-id 11155111 --constructor-args $(cast abi-encode "constructor(address,uint64)" 0x83c8c0B395850bA55c830451Cfaca4F2A667a983 11155111) <ChangeColorClientAddr> ChangeColorClient`.
+   1. `forge verify-contract --etherscan-api-key <ETHERSCAN_API_KEY> --chain-id 11155111 --constructor-args $(cast abi-encode "constructor(address,uint64)" 0x83c8c0B395850bA55c830451Cfaca4F2A667a983 11155111) <ChangeColorClientAddr> ChangeColorClient`
+9. Deploy the NFT contract `ZKColors`.
+   1.  `forge create --rpc-url <ALCHEMY_ENDPOINT> --private-key <SEPOLIA_PRIVATE_KEY> src/ZKColors.sol:ZKColors --constructor-args <ChangeColorClientAddr>`
+10. Verify the NFT contract `ZKColors`.
+   1. `forge verify-contract --etherscan-api-key <ETHERSCAN_API_KEY> --chain-id 11155111 --constructor-args $(cast abi-encode "constructor(address)" <ChangeColorClientAddr>) <ZKColorsAddr> ZKColors`
+11. Call the `updateNFTAddr` function in `ChangeColorClientAddr` to point it to the `ZKColors` address.
+    1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <ChangeColorClientAddr> "updateNFTAddr(address)" <ZKColorsAddr> --rpc-url <ALCHEMY_ENDPOINT>`
 
 ## Setup Part 2 (Minting Tokens)
 
@@ -25,6 +31,8 @@ The steps below assume that you have Node.js and Typescript installed on your ma
    1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken1Address> "mint(uint256)" <N> --rpc-url <ALCHEMY_ENDPOINT>`
 2. Mint M DummyToken2s to your address.
    1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken2Address> "mint(uint256)" <M> --rpc-url <ALCHEMY_ENDPOINT>`
+3. Mint an NFT to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <ZKColorsAddr> "mint()" --rpc-url <ALCHEMY_ENDPOINT>`
 
 ## Generate ZKP
 
@@ -43,7 +51,8 @@ The steps below assume that you have Node.js and Typescript installed on your ma
 
 - DummyToken1: 0xd04D6724Fb95BAda8ef799Ff3E2Cb4728c9f145D
 - DummyToken2: 0x8B17E3629C1253805dbDBAFee6C7382aB5F1Bf75
-- ChangeColorClient: 0xd61ffc4a1A36F448778D56aA15B915b201a8D853
+- ChangeColorClient: 0xf4bE653537F157Ea1139d4405203C17e7F7445d0
+- ZKColors: 0xa98Da97faE6234b515415fF8BD9496F53E0cBa3b
 
 
 
