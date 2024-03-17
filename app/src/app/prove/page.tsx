@@ -26,7 +26,10 @@ export default async function Prove({ searchParams }: PageProps) {
   const blockNumber = await publicClient.getBlockNumber();
   const inputs: UserInput<typeof jsonInputs> = {
     blockNumber: Number(blockNumber),
+    token1Addr: jsonInputs.token1Addr,
+    token2Addr: jsonInputs.token2Addr,
     address: connected,
+    tokenId: jsonInputs.tokenId,
   }
 
   return (
