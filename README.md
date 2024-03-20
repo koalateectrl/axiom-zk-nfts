@@ -71,3 +71,7 @@ The steps below assume that you have Node.js and Typescript installed on your ma
    1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken2Address> "mint(uint256)" <M> --rpc-url <ALCHEMY_ENDPOINT>`
 4. Mint an NFT to your address.
    1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <ZKColorsAddr> "mint()" --rpc-url <ALCHEMY_ENDPOINT>`
+
+## Part 3: Start the development environment
+1. Open the '/app' directory in the terminal
+2. Enter 'npm start dev'
