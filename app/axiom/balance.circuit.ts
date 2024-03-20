@@ -51,7 +51,7 @@ export const circuit = async (inputs: CircuitInputs) => {
   const balanceBefore2 = await mappingBeforeToken2.nested([inputs.userAddr]);
   const mappingAfterToken2 = getSolidityMapping(inputs.blockNumber, inputs.token2Addr, 0);
   const balanceAfter2 = await mappingAfterToken2.nested([inputs.userAddr]);
-  const averageBalanceToken2 = div(add(balanceBefore2.toCircuitValue(), balanceAfter2.toCircuitValue()), 2);
+  const afterVaaverageBalanceToken2 = div(add(balanceBefore2.toCircuitValue(), balanceAfter2.toCircuitValue()), 2);
   
   addToCallback(inputs.blockNumber);
   addToCallback(inputs.token1Addr);
@@ -60,6 +60,6 @@ export const circuit = async (inputs: CircuitInputs) => {
   addToCallback(inputs.tokenId);
 
   addToCallback(averageBalanceToken1);
-  addToCallback(averageBalanceToken2);
+  addToCallback(afterVaaverageBalanceToken2);
 
 };
