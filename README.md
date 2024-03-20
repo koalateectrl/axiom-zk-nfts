@@ -64,8 +64,7 @@ The steps below assume that you have Node.js and Typescript installed on your ma
 
 ## Part 2: Send dummy tokens / nft to your account
 1. Create a Sepolia address, accessible by browser (metamask, walletconnect)
-2. Send dummy tokens to your address:
-   1. Mint N DummyToken1s to your address.
+2. Mint N DummyToken1s to your address.
    1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken1Address> "mint(uint256)" <N> --rpc-url <ALCHEMY_ENDPOINT>`
 3. Mint M DummyToken2s to your address.
    1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken2Address> "mint(uint256)" <M> --rpc-url <ALCHEMY_ENDPOINT>`
