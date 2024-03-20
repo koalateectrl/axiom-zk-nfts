@@ -10,7 +10,11 @@
   "author": "Intrinsic Technologies",
   "license": "MIT",
   "dependencies": {
+<<<<<<< Updated upstream
     "@axiom-crypto/client": "^2.0.6",
+=======
+    "@axiom-crypto/client": "2.0.6",
+>>>>>>> Stashed changes
     "axiom": "^0.1.6",
     "dotenv": "^16.4.5",
     "ethers": "^6.11.1"

@@ -56,3 +56,18 @@ The steps below assume that you have Node.js and Typescript installed on your ma
 
 
 
+# Dev-Frontend Setup
+
+## Part 1: Fill out environment variables
+- Fill out /axiom-zk-nfts/.env.example, save as .env
+- Fill out /axiom-zk-nfts/app/.env.local.example, save as .env.local
+
+## Part 2: Send dummy tokens / nft to your account
+1. Create a Sepolia address, accessible by browser (metamask, walletconnect)
+2. Send dummy tokens to your address:
+   1. Mint N DummyToken1s to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken1Address> "mint(uint256)" <N> --rpc-url <ALCHEMY_ENDPOINT>`
+3. Mint M DummyToken2s to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <DummyToken2Address> "mint(uint256)" <M> --rpc-url <ALCHEMY_ENDPOINT>`
+4. Mint an NFT to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> <ZKColorsAddr> "mint()" --rpc-url <ALCHEMY_ENDPOINT>`
