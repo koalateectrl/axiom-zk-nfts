@@ -34,25 +34,21 @@ export const defaultInputs = {
   "tokenId": 1
 }
 
-// The function name `circuit` is searched for by default by our Axiom CLI; if you decide to 
-// change the function name, you'll also need to ensure that you also pass the Axiom CLI flag 
+// The function name `circuit` is searched for by default by our Axiom CLI; if you decide to
+// change the function name, you'll also need to ensure that you also pass the Axiom CLI flag
 // `-f <circuitFunctionName>` for it to work
 export const circuit = async (inputs: CircuitInputs) => {
-
-
   const mappingBeforeToken1 = getSolidityMapping(sub(inputs.blockNumber, 1000), inputs.token1Addr, 0);
   const balanceBefore1 = await mappingBeforeToken1.nested([inputs.userAddr]);
   const mappingAfterToken1 = getSolidityMapping(inputs.blockNumber, inputs.token1Addr, 0);
   const balanceAfter1 = await mappingAfterToken1.nested([inputs.userAddr]);
-
   const averageBalanceToken1 = div(add(balanceBefore1.toCircuitValue(), balanceAfter1.toCircuitValue()), 2);
-
   const mappingBeforeToken2 = getSolidityMapping(sub(inputs.blockNumber, 1000), inputs.token2Addr, 0);
   const balanceBefore2 = await mappingBeforeToken2.nested([inputs.userAddr]);
   const mappingAfterToken2 = getSolidityMapping(inputs.blockNumber, inputs.token2Addr, 0);
   const balanceAfter2 = await mappingAfterToken2.nested([inputs.userAddr]);
   const afterVaaverageBalanceToken2 = div(add(balanceBefore2.toCircuitValue(), balanceAfter2.toCircuitValue()), 2);
-  
+
   addToCallback(inputs.blockNumber);
   addToCallback(inputs.token1Addr);
   addToCallback(inputs.token2Addr);
