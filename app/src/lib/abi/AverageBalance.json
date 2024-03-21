@@ -1,1 +1,246 @@
-[{"inputs":[{"internalType":"address","name":"_axiomV2QueryAddress","type":"address"},{"internalType":"uint64","name":"_callbackSourceChainId","type":"uint64"},{"internalType":"bytes32","name":"_querySchema","type":"bytes32"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"AxiomV2QueryAddressIsZero","type":"error"},{"inputs":[],"name":"CallerMustBeAxiomV2Query","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"blockNumber","type":"uint256"},{"indexed":false,"internalType":"address","name":"addr","type":"address"},{"indexed":false,"internalType":"uint256","name":"averageBalance","type":"uint256"}],"name":"AverageBalanceStored","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint64","name":"sourceChainId","type":"uint64"},{"indexed":false,"internalType":"address","name":"caller","type":"address"},{"indexed":true,"internalType":"bytes32","name":"querySchema","type":"bytes32"},{"indexed":true,"internalType":"uint256","name":"queryId","type":"uint256"}],"name":"AxiomV2Call","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint64","name":"sourceChainId","type":"uint64"},{"indexed":false,"internalType":"address","name":"caller","type":"address"},{"indexed":true,"internalType":"bytes32","name":"querySchema","type":"bytes32"},{"indexed":true,"internalType":"uint256","name":"queryId","type":"uint256"}],"name":"AxiomV2OffchainCall","type":"event"},{"inputs":[{"internalType":"uint64","name":"sourceChainId","type":"uint64"},{"internalType":"address","name":"caller","type":"address"},{"internalType":"bytes32","name":"querySchema","type":"bytes32"},{"internalType":"uint256","name":"queryId","type":"uint256"},{"internalType":"bytes32[]","name":"axiomResults","type":"bytes32[]"},{"internalType":"bytes","name":"extraData","type":"bytes"}],"name":"axiomV2Callback","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint64","name":"sourceChainId","type":"uint64"},{"internalType":"address","name":"caller","type":"address"},{"internalType":"bytes32","name":"querySchema","type":"bytes32"},{"internalType":"uint256","name":"queryId","type":"uint256"},{"internalType":"bytes32[]","name":"axiomResults","type":"bytes32[]"},{"internalType":"bytes","name":"extraData","type":"bytes"}],"name":"axiomV2OffchainCallback","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"axiomV2QueryAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"}],"name":"provenAverageBalances","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_axiomV2QueryAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint64",
+        "name": "_callbackSourceChainId",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  { "inputs": [], "name": "AxiomV2QueryAddressIsZero", "type": "error" },
+  { "inputs": [], "name": "CallerMustBeAxiomV2Query", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "owner", "type": "address" }
+    ],
+    "name": "OwnableInvalidOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "OwnableUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint64",
+        "name": "sourceChainId",
+        "type": "uint64"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "querySchema",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "queryId",
+        "type": "uint256"
+      }
+    ],
+    "name": "AxiomV2Call",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint64",
+        "name": "sourceChainId",
+        "type": "uint64"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "querySchema",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "queryId",
+        "type": "uint256"
+      }
+    ],
+    "name": "AxiomV2OffchainCall",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "blockNumber",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token1Addr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token2Addr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "userAddr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "averageBalanceToken1",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "afterVaaverageBalanceToken2",
+        "type": "uint256"
+      }
+    ],
+    "name": "CallBackValues",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint64", "name": "sourceChainId", "type": "uint64" },
+      { "internalType": "address", "name": "caller", "type": "address" },
+      { "internalType": "bytes32", "name": "querySchema", "type": "bytes32" },
+      { "internalType": "uint256", "name": "queryId", "type": "uint256" },
+      {
+        "internalType": "bytes32[]",
+        "name": "axiomResults",
+        "type": "bytes32[]"
+      },
+      { "internalType": "bytes", "name": "extraData", "type": "bytes" }
+    ],
+    "name": "axiomV2Callback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint64", "name": "sourceChainId", "type": "uint64" },
+      { "internalType": "address", "name": "caller", "type": "address" },
+      { "internalType": "bytes32", "name": "querySchema", "type": "bytes32" },
+      { "internalType": "uint256", "name": "queryId", "type": "uint256" },
+      {
+        "internalType": "bytes32[]",
+        "name": "axiomResults",
+        "type": "bytes32[]"
+      },
+      { "internalType": "bytes", "name": "extraData", "type": "bytes" }
+    ],
+    "name": "axiomV2OffchainCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "axiomV2QueryAddress",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nftAddr",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_nftAddr", "type": "address" }
+    ],
+    "name": "updateNFTAddr",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

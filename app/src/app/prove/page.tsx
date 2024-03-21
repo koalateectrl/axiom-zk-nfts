@@ -1,6 +1,6 @@
 import BuildQuery from "@/components/prove/BuildQuery";
 import Title from "@/components/ui/Title";
-import callbackAbi from '@/lib/abi/AverageBalance.json';
+import callbackAbi from '@/lib/abi/ChangeColorClient.json';
 import jsonInputs from "../../../axiom/data/inputs.json";
 import { bytes32 } from "@/lib/utils";
 import { publicClient } from "@/lib/viemClient";
@@ -26,7 +26,10 @@ export default async function Prove({ searchParams }: PageProps) {
   const blockNumber = await publicClient.getBlockNumber();
   const inputs: UserInput<typeof jsonInputs> = {
     blockNumber: Number(blockNumber),
-    address: connected,
+    token1Addr: String(jsonInputs.token1Addr),
+    token2Addr: String(jsonInputs.token2Addr),
+    userAddr: connected,
+    tokenId: Number(jsonInputs.tokenId),
   }
 
   return (

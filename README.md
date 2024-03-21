@@ -54,5 +54,24 @@ The steps below assume that you have Node.js and Typescript installed on your ma
 - ChangeColorClient: 0xf4bE653537F157Ea1139d4405203C17e7F7445d0
 - ZKColors: 0xa98Da97faE6234b515415fF8BD9496F53E0cBa3b
 
+# Dev-Frontend Setup
 
+## Part 1: Fill out environment variables
+- Fill out /axiom-zk-nfts/.env.example, save as .env.
+- Fill out /axiom-zk-nfts/app/.env.local.example, save as .env.local.
 
+## Part 2: Send dummy tokens / nft to your account
+1. Create a Sepolia address, accessible by browser (metamask, walletconnect)
+2. Mint N DummyToken1s to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> 0xd04D6724Fb95BAda8ef799Ff3E2Cb4728c9f145D "mint(uint256)" <N> --rpc-url <ALCHEMY_ENDPOINT>`
+3. Mint M DummyToken2s to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> 0x8B17E3629C1253805dbDBAFee6C7382aB5F1Bf75 "mint(uint256)" <M> --rpc-url <ALCHEMY_ENDPOINT>`
+4. Mint an NFT to your address.
+   1. `cast send --private-key <SEPOLIA_PRIVATE_KEY> 0xa98Da97faE6234b515415fF8BD9496F53E0cBa3b "mint()" --rpc-url <ALCHEMY_ENDPOINT>`
+
+## Part 3: Update circuit inputs and start the development environment
+1. Update axiom/data/inputs.json with the latest Sepolia block number, dummy token addresses, your address, and your NFT token ID.
+2. Navigate to the '/app' directory in the terminal.
+3. Enter 'npm run dev'.
+4. Open your browser and navigate to 'localhost:3000'.
+5. Follow the app instructions to generate a proof and send a query.
