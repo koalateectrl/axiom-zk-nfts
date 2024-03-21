@@ -54,7 +54,7 @@ The steps below assume that you have Node.js and Typescript installed on your ma
 - ChangeColorClient: 0xf4bE653537F157Ea1139d4405203C17e7F7445d0
 - ZKColors: 0xa98Da97faE6234b515415fF8BD9496F53E0cBa3b
 
-# Dev-Frontend Setup
+# Frontend Setup
 
 ## Part 1: Fill out environment variables
 - Fill out /axiom-zk-nfts/.env.example, save as .env.
